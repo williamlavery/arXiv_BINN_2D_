@@ -1,0 +1,97 @@
+
+==============================================================
+==============================================================
+ 			DATA PIPELINE
+==============================================================
+==============================================================
+
+
+Setting parameters
+==============================================================
+Dynamic parameters set in "data__configDynamic.py"
+
+
+Pipeline packaging
+==============================================================
+File: "data__simulate.py"
+
+sim/
+│
+├── model_finder/
+│   Check for data existence
+│
+├── if exist_bool == True and overwrite_bool == False/
+│   └── pass
+│
+└── elif (exist_bool == True and overwrite_bool == True) Or exist_bool == False/
+        └── 1. Initialize and forward solve PDE
+        └── 2. Add noise
+        └── 3. Save model
+
+
+==============================================================
+==================== Pipeline Details ========================
+==============================================================
+
+==============================================================
+1. Forward solve PDE:   "data__initialise.py"
+==============================================================
+
+Function:       RDEq2
+Function info:  RDEq2_func_info
+
+{
+"dataXnum":len(x),
+"dataTnum":len(t),
+"dataK": K,
+"dataICLabel": IC_label,
+"dataDiffLabel": diff_label,
+"dataGrowLabel": grow_label
+}
+
+
+==============================================================
+2. Add noise:   "data__addNoise.py"
+==============================================================
+
+Function: add_noise
+Function_info: add_noise_func_info
+
+{
+"dataGamma": gamma,        
+"dataNoisePercent": noise_percent,
+"dataNoiseSeed": seed
+}
+
+==============================================================
+3. Construct BINN model:   "data_constructor.py"
+==============================================================
+
+Function: data_construct
+Function_info: model_construction_func_info
+
+
+Function info: Simply constructing data_obj (everything is 
+	       predetermined)
+
+
+All function infos
+# ===========================================================
+
+# 1.
+{
+"dataXnum":len(x),
+"dataTnum":len(t),
+"dataK": K,
+"dataICLabel": IC_label,
+"dataDiffLabel": diff_label,
+"dataGrowLabel": grow_label
+}
+
+
+# 2.
+{
+"dataGamma": gamma,        
+"dataNoisePercent": noise_percent,
+"dataNoiseSeed": seed
+}

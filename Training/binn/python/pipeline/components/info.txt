@@ -1,0 +1,203 @@
+
+==============================================================
+==============================================================
+ 			BIOLOGICAL PIPELINE
+==============================================================
+==============================================================
+
+
+Setting parameters
+==============================================================
+Fixed parameters set in   "binn__config.py"
+Dynamic parameters set in "binn__configDynamic.py"
+
+
+
+Pipeline packaging
+==============================================================
+File: "binn__simulate.py"
+
+sim/
+│
+├── model_finder/
+│   "Check for model existence (I.e., train or retrain)
+│
+├── if exist_bool == True/
+│   └── retrain_binn/
+│       7. Simply retrain (load original/dn data_obj used for saving)
+│
+└── else (model doesn't exist)/
+    └── first_train_binn/
+        └── 1. Load original data
+        └── 2. Form TV split
+        └── 3. Construct BINN model
+	└── 4. Execute first round of training
+
+save_model/
+└── 5. Save model
+└── 6. Generate binn data_obj
+
+
+==============================================================
+==================== Pipeline Details ========================
+==============================================================
+
+==============================================================
+1. Load dataObj:   "binn__loadData.py"
+==============================================================
+
+Function:       load_raw_data
+Function info:  load_raw_func_info
+
+{"dataXnum":		xNum,
+ "dataTnum":		tNum,
+ "dataK": 		K,
+ "dataICLabel": 	IC_label,
+ "dataDiffLabel": 	diff_label,
+ "dataGrowLabel": 	grow_label,
+ "dataGamma": 		gamma,
+ "dataNoisePercent": 	noise_percent,
+ "dataNoiseSeed": 	seed
+}
+
+
+
+Function:       load_dn_data
+Function info:   load_dn_func_info
+
+{"dataXnum":		xNum,                                                       
+ "dataTnum":		tNum,					      
+ "dataK": 		K,					      
+ "dataICLabel": 	IC_label,				      
+ "dataDiffLabel":	diff_label,				       
+ "dataGrowLabel": 	grow_label,
+ "dataGamma": 		gamma,
+ "dataNoisePercent": 	noise_percent,
+ "dataNoiseSeed": 	seedNoise,
+ "denoiseVF": 		val_fraction,
+ "denoiseTVmethod": 	generate_indices_func_label,
+ "denoiseTVsplitSeed":  generate_indices_func_additional_args[0],
+ "denoiseNNuSize": 	u_size,
+ "denoiseLr": 		lr,
+ "denoiseBatchSize": 	batch_size,
+ "denoiseRelSaveThresh":rel_update_thresh,
+ "denoiseES": 		early_stopping
+}
+
+
+==============================================================
+2. Split dataObj into train/val sets:   "binn__splitTV.py"
+==============================================================
+
+Function: random_val_indices_func_inf
+Function_info: random_val_indices_func_info
+
+{"binnVF":		0.2,
+ "binnTVmethod": 	"random",
+ "binnTVsplitSeed": 	seed
+}
+
+Function:      TVsplit
+Function_info: TVsplit_func_info
+
+Determined by TV split function used e.g. 
+	       `random_val_indices_func_inf`
+
+
+==============================================================
+3. Construct BINN model:   "binn__modelConstructor.py"
+==============================================================
+
+Function: model_construction
+Function_info: model_construction_func_info
+
+{"binnNNuSize": 	u_size,
+ "binnNNDSize": 	D_size,
+ "binnDOneParamBool": D_one_param_bool
+ "binnNNGSize": 	G_size 
+}
+
+Function info: Determind by TV split function used e.g. 
+	       `random_val_indices_func_inf`
+
+
+==============================================================
+4. First training round:   "binn__firstTrain.py"
+==============================================================
+Function: first_train_binn
+Function_info: model_fit_func_info
+
+{"twoStepBool":         two_step_bool,
+ "binnLr": 		lr,
+ "binnBatchSize": 	batch_size,
+ "binnRelSaveThresh": 	rel_update_thresh,
+ "binnES": 		early_stopping
+}
+
+==============================================================
+5. Generate binn data_obj:   "save_model_generated_dataOb.py"
+==============================================================
+Function:  save_model_generated_dataOb
+Function_info:  None simply generating binn data_obj - no new info 
+
+
+==============================================================
+6. Save model:   "binn__generateDataObj.py"
+==============================================================
+Function:       save_model
+Function_info:  None simply saving model
+
+
+==============================================================
+7. Retraining:   "binn__retrain.py"
+==============================================================
+Function:       model_finder
+Function_info:  N/A
+
+Function:       model_fit_again
+Function_info:  None all info predetermined
+
+
+All function infos
+# ===========================================================
+
+# 1.
+{"dataXnum":		xNum,                                                       
+ "dataTnum":		tNum,					      
+ "dataK": 		K,					      
+ "dataICLabel": 	IC_label,				      
+ "dataDiffLabel":	diff_label,				       
+ "dataGrowLabel": 	grow_label,
+ "dataGamma": 		gamma,
+ "dataNoisePercent": 	noise_percent,
+ "dataNoiseSeed": 	seedNoise,
+ "denoiseVF": 		val_fraction,
+ "denoiseTVmethod": 	generate_indices_func_label,
+ "denoiseTVsplitSeed":  generate_indices_func_additional_args[0],
+ "denoiseNNuSize": 	u_size,
+ "denoiseLr": 		lr,
+ "denoiseBatchSize": 	batch_size,
+ "denoiseRelSaveThresh":rel_update_thresh,
+ "denoiseES": 		early_stopping
+}
+
+# 2.
+{"binnVF":		    val_fraction,
+ "binnTVmethod": 	"random",
+ "binnTVsplitSeed": 	seed
+}
+
+# 3.
+{"binnNNuSize": 	u_size,
+ "binnNNDSize": 	D_size,
+ "binnDOneParamBool": D_one_param_bool
+ "binnNNGSize": 	G_size 
+}
+
+# 4.
+{"twoStepBool":         two_step_bool,
+ "binnLr": 		lr,
+ "binnBatchSize": 	batch_size,
+ "binnRelSaveThresh": 	rel_update_thresh,
+ "binnES": 		early_stopping
+}
