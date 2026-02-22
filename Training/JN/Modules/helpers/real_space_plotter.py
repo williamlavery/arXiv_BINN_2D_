@@ -981,12 +981,13 @@ def plot_eval_G_multi_gray(
         #     )
 
     ax.set_xlabel(r"cell density [cells mm$^{-2}]$", fontsize=11)
-    ax.set_ylabel(r"cell growth [mm$^2$ days$^{-1}$]", fontsize=11)
+    ax.set_ylabel(r"cell growth [days$^{-1}$]", fontsize=11)
     ax.set_facecolor("white")
     ax.legend(
         loc="center",
         bbox_to_anchor=legend_pos,
         ncols=legend_ncols,
+        frameon = True,
         fontsize=legend_fontsize,
         title= legend_title,
         title_fontsize = legend_fontsize,
@@ -1208,6 +1209,7 @@ def plot_eval_D_multi(
         loc="center",
         bbox_to_anchor=legend_pos,
         ncols=legend_ncols,
+        frameon =True,
         fontsize=legend_fontsize,
         title=legend_title,
         title_fontsize=legend_fontsize,

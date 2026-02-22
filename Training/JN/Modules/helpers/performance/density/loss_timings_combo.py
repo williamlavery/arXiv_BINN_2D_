@@ -1,8 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.cm as cm
+import matplotlib as mpl
 from matplotlib.patches import Patch
-import sys
 
 from .prepare_model_loss import prepare_model_run_data
 
@@ -21,30 +20,23 @@ def plot_loss_and_time_dual_axis(
     x_label=r"$N_u$",
     x_label_fontsize=14,
     legend_size=16,
-    legend_bool = False,
-    # NEW PARAMETERS:
+    legend_bool=False,
     intra_spacing=0.15,   # spacing between loss & time bars inside a group
-    inter_spacing=0.80,    # spacing between groups (labels)
-    alpha = 0.3
+    inter_spacing=0.80,   # spacing between groups (labels)
+    alpha=0.3,
+    y2lim=None,
+    # --- optional knobs for errorbars ---
+    err_ecolor="black",
+    err_elinewidth=1.5,
+    err_capsize=5,
+    err_capthick=1.5,
 ):
     """
     Combined dual-axis bar plot where:
-
         - Left y-axis  = Loss (bars)
         - Right y-axis = Time (bars)
-
-    You can adjust:
-        intra_spacing : distance between the LOSS and TIME bars within each group
-        inter_spacing : spacing between different x-axis groups
-
-    Example:
-        |Loss| |Time|     (big gap)     |Loss| |Time|
+    Error bars are drawn with the SAME alpha as their corresponding bars.
     """
-
-    import numpy as np
-    import matplotlib.pyplot as plt
-    import matplotlib as mpl
-    from matplotlib.patches import Patch
 
     # ---------------- Colors per x-label ----------------
     if colors is None:
@@ -77,16 +69,13 @@ def plot_loss_and_time_dual_axis(
     label_color_map = {lbl: colors[i % len(colors)] for i, lbl in enumerate(all_labels)}
 
     # ---------------- Group Geometry ----------------
-    # The base x-spacing between LABEL GROUPS:
     x_positions = np.arange(num_labels) * inter_spacing
 
-    # Within each label group, each experimental GROUP gets a slot:
-    slot_width = 0.35   # width allocated to one experimental group within a label
+    slot_width = 0.35          # width allocated to one experimental group within a label
     bar_width = slot_width * 0.40
 
-    # Loss/Time inside each slot: offset left/right by intra-spacing
-    loss_offset  = -intra_spacing / 2
-    time_offset  = +intra_spacing / 2
+    loss_offset = -intra_spacing / 2
+    time_offset = +intra_spacing / 2
 
     # ---------------- Plot Setup ----------------
     fig, ax1 = plt.subplots(figsize=figsize)
@@ -114,27 +103,40 @@ def plot_loss_and_time_dual_axis(
                 m_loss = loss_d["mean_best_model_loss"]
                 min_l = loss_d.get("min_best_model_loss", m_loss - loss_d["std_best_model_loss"])
                 max_l = loss_d.get("max_best_model_loss", m_loss + loss_d["std_best_model_loss"])
-                yerr_loss = [[m_loss - min_l], [max_l - m_loss]]
+                yerr_loss = np.array([[m_loss - min_l], [max_l - m_loss]])
 
                 # --- Time stats ---
                 m_time = time_d["run_time_mean"]
                 min_t = time_d.get("run_time_min", m_time - time_d["run_time_std"])
                 max_t = time_d.get("run_time_max", m_time + time_d["run_time_std"])
-                yerr_time = [[m_time - min_t], [max_t - m_time]]
+                yerr_time = np.array([[m_time - min_t], [max_t - m_time]])
 
-                #hatch = hatch_patterns[gi % len(hatch_patterns)]
                 color = label_color_map[label]
-
-                # slot for group gi
                 slot_x = base_x + gi * slot_width
+
+                # Errorbar styling: alpha matches the bar alpha
+                loss_error_kw = dict(
+                    ecolor=err_ecolor,
+                    elinewidth=err_elinewidth,
+                    capsize=err_capsize,
+                    capthick=err_capthick,
+                    alpha=0.75,              # match LOSS bar alpha below
+                )
+                time_error_kw = dict(
+                    ecolor=err_ecolor,
+                    elinewidth=err_elinewidth,
+                    capsize=err_capsize,
+                    capthick=err_capthick,
+                    alpha=alpha,             # match TIME bar alpha below
+                )
 
                 # --- LOSS BAR --- (left y-axis)
                 ax1.bar(
                     slot_x + loss_offset,
                     m_loss,
                     width=bar_width,
-                    yerr=np.array(yerr_loss),
-                    capsize=5,
+                    yerr=yerr_loss,
+                    error_kw=loss_error_kw,
                     facecolor=color,
                     alpha=0.75,
                     edgecolor="black",
@@ -147,8 +149,8 @@ def plot_loss_and_time_dual_axis(
                     slot_x + time_offset,
                     m_time,
                     width=bar_width,
-                    yerr=np.array(yerr_time),
-                    capsize=5,
+                    yerr=yerr_time,
+                    error_kw=time_error_kw,
                     facecolor=color,
                     alpha=alpha,
                     edgecolor="black",
@@ -158,9 +160,13 @@ def plot_loss_and_time_dual_axis(
 
         # ---------------- Legend ----------------
         handles = [
-            Patch(facecolor="white", edgecolor="black",
-                  hatch=hatch_patterns[i % len(hatch_patterns)],
-                  label=label_list[i], linewidth=1.5)
+            Patch(
+                facecolor="white",
+                edgecolor="black",
+                hatch=hatch_patterns[i % len(hatch_patterns)],
+                label=label_list[i],
+                linewidth=1.5,
+            )
             for i in range(num_groups)
         ]
         if legend_bool:
@@ -171,11 +177,15 @@ def plot_loss_and_time_dual_axis(
         ax2.set_ylabel(y2_label, fontsize=14, color="gray")
 
         ax1.set_yscale("log")
-        ax2.set_yscale("log")
+        # ax2.set_yscale("log")
 
         ax1.set_xticks(x_positions)
         ax1.set_xticklabels(all_labels, fontsize=14)
 
+        if y2lim:
+            ax2.set_ylim(y2lim)
+
+        ax2.tick_params(axis="y", colors="gray")
         ax1.set_xlabel(x_label, fontsize=x_label_fontsize)
 
         fig.tight_layout()
