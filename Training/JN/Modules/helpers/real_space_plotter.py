@@ -171,7 +171,7 @@ def plot_eval_D_multi_fixedD(
                 "--",
                 lw=1,
                 color="k",
-                label=f"$D_{Dnum}(u)$",
+                label=f"$D_{Dnum}$",
                 zorder=4,
             )
         # else:
@@ -404,7 +404,7 @@ def plot_eval_G_multi(
                 "--",
                 lw=1,
                 color="k",
-                label=f"$G_{Gnum}(u)$",
+                label=f"$G_{Gnum}$",
                 zorder=4,
             )
         else:
@@ -641,7 +641,7 @@ def plot_eval_D_multi_gray(
                 "--",
                 lw=1,
                 color="k",
-                label=f"$D_{Dnum}(u)$",
+                label=f"$D_{Dnum}$",
                 zorder=4,
             )
         else:
@@ -739,8 +739,8 @@ def plot_eval_D_multi_gray(
         #         zorder=2,
         #     )
 
-    ax.set_xlabel(r"cell density [cells mm$^{-2}]$", fontsize=11)
-    ax.set_ylabel(r"cell diffusion [mm$^2$ days$^{-1}$]", fontsize=11)
+    ax.set_xlabel(r"Cell density [cells mm$^{-2}]$", fontsize=11)
+    ax.set_ylabel(r"Diffusion [mm$^2$ days$^{-1}$]", fontsize=11)
     ax.set_facecolor("white")
     ax.legend(
         loc="center",
@@ -882,7 +882,7 @@ def plot_eval_G_multi_gray(
                 "--",
                 lw=1,
                 color="k",
-                label=f"$G_{Gnum}(u)$",
+                label=f"$G_{Gnum}$",
                 zorder=4,
             )
         else:
@@ -980,8 +980,8 @@ def plot_eval_G_multi_gray(
         #         zorder=2,
         #     )
 
-    ax.set_xlabel(r"cell density [cells mm$^{-2}]$", fontsize=11)
-    ax.set_ylabel(r"cell growth [days$^{-1}$]", fontsize=11)
+    ax.set_xlabel(r"Cell density [cells mm$^{-2}]$", fontsize=11)
+    ax.set_ylabel(r"Growth [days$^{-1}$]", fontsize=11)
     ax.set_facecolor("white")
     ax.legend(
         loc="center",
@@ -1148,7 +1148,7 @@ def plot_eval_D_multi(
                 "--",
                 lw=1,
                 color="k",
-                label=f"$D_{Dnum}(u)$",
+                label=f"$D_{Dnum}$",
                 zorder=4,
             )
         else:
@@ -1202,8 +1202,8 @@ def plot_eval_D_multi(
                     zorder=3,
                 )
 
-    ax.set_xlabel(r"cell density [cells mm$^{-2}]$", fontsize=11)
-    ax.set_ylabel(r"cell diffusion [mm$^2$ days$^{-1}$]", fontsize=11)
+    ax.set_xlabel(r"Cell density [cells mm$^{-2}]$", fontsize=11)
+    ax.set_ylabel(r"Diffusion [mm$^2$ days$^{-1}$]", fontsize=11)
     ax.set_facecolor("white")
     ax.legend(
         loc="center",
@@ -1373,7 +1373,7 @@ def plot_eval_D_multi_fixedD(
                 "--",
                 lw=1,
                 color="k",
-                label=f"$D_{Dnum}(u)$",
+                label=f"$D_{Dnum}$",
                 zorder=4,
             )
         # else:
@@ -1427,8 +1427,8 @@ def plot_eval_D_multi_fixedD(
                     zorder=3,
                 )
 
-    ax.set_xlabel(r"cell density [cells mm$^{-2}]$", fontsize=11)
-    ax.set_ylabel(r"cell diffusion [mm$^2$ days$^{-1}$]", fontsize=11)
+    ax.set_xlabel(r"Cell density [cells mm$^{-2}]$", fontsize=11)
+    ax.set_ylabel(r"Diffusion [mm$^2$ days$^{-1}$]", fontsize=11)
     ax.set_facecolor("white")
     ax.legend(
         loc="center",
@@ -1579,7 +1579,7 @@ def plot_eval_G_multi(
                 "--",
                 lw=1,
                 color="k",
-                label=f"$G_{Gnum}(u)$",
+                label=f"$G_{Gnum}$",
                 zorder=4,
             )
         else:
@@ -1633,8 +1633,8 @@ def plot_eval_G_multi(
                     zorder=3,
                 )
 
-    ax.set_xlabel(r"cell density [cells mm$^{-2}]$", fontsize=11)
-    ax.set_ylabel(r"cell growth [mm$^2$ days$^{-1}$]", fontsize=11)
+    ax.set_xlabel(r"Cell density [cells mm$^{-2}]$", fontsize=11)
+    ax.set_ylabel(r"Growth [mm$^2$ days$^{-1}$]", fontsize=11)
     ax.set_facecolor("white")
     ax.legend(
         loc="center",
@@ -1785,7 +1785,7 @@ def plot_eval_G_multi_fixedG(
                 "--",
                 lw=1,
                 color="k",
-                label=f"$G_{Gnum}(u)$",
+                label=f"$G_{Gnum}$",
                 zorder=4,
             )
         # else:
@@ -1839,8 +1839,8 @@ def plot_eval_G_multi_fixedG(
                     zorder=3,
                 )
 
-    ax.set_xlabel(r"cell density [cells mm$^{-2}]$", fontsize=11)
-    ax.set_ylabel(r"cell growth [mm$^2$ days$^{-1}$]", fontsize=11)
+    ax.set_xlabel(r"Cell density [cells mm$^{-2}]$", fontsize=11)
+    ax.set_ylabel(r"Growth [mm$^2$ days$^{-1}$]", fontsize=11)
     ax.set_facecolor("white")
     ax.legend(
         loc="center",
